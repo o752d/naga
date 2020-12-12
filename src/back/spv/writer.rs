@@ -1297,6 +1297,8 @@ impl Writer {
                 let (cond_id, cond_type) =
                     self.write_expression(ir_module, ir_function, expression, block, function)?;
 
+                let cond_type_inner = self.get_type_inner(&ir_module.types, cond_type);
+
                 Ok((cond_id, cond_type))
             }
             crate::Expression::As {
@@ -1510,10 +1512,18 @@ impl Writer {
                     ));
                 Ok((id, image_sample_result_type))
             }
-            _ => {
-                log::error!("unimplemented {:?}", expression);
-                Err(Error::FeatureNotImplemented("expression"))
-            }
+
+            crate::Expression::Load { pointer } => {}
+            crate::Expression::ImageLoad {
+                image,
+                coordinate,
+                index,
+            } => {}
+            crate::Expression::Unary { op, expr } => {}
+            crate::Expression::Derivative { axis, expr } => {}
+            crate::Expression::Relational { fun, argument } => {}
+            crate::Expression::Transpose(_) => {}
+            crate::Expression::ArrayLength(_) => {}
         }
     }
 
