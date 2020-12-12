@@ -1288,6 +1288,17 @@ impl Writer {
                 };
                 Ok((id, result_type))
             }
+            crate::Expression::Select {
+                condition,
+                accept,
+                reject,
+            } => {
+                let expression = &ir_function.expressions[condition];
+                let (cond_id, cond_type) =
+                    self.write_expression(ir_module, ir_function, expression, block, function)?;
+
+                Ok((cond_id, cond_type))
+            }
             crate::Expression::As {
                 expr,
                 kind,

@@ -564,6 +564,18 @@ pub(super) fn instruction_binary(
 // Relational and Logical Instructions
 //
 
+pub(super) fn instruction_conditional_select(
+    result_type_id: Word,
+    id: Word,
+    condition: Word,
+) -> Instruction {
+    let mut instruction = Instruction::new(Op::Select);
+    instruction.set_type(result_type_id);
+    instruction.set_result(id);
+    instruction.add_operand(condition);
+    instruction
+}
+
 //
 // Derivative Instructions
 //
