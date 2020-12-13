@@ -597,6 +597,7 @@ pub enum MathFunction {
     SmoothStep,
     Sqrt,
     InverseSqrt,
+    Transpose,
     Determinant,
     // bits
     CountOneBits,
@@ -612,6 +613,10 @@ pub enum SampleLevel {
     Zero,
     Exact(Handle<Expression>),
     Bias(Handle<Expression>),
+    Gradient {
+        x: Handle<Expression>,
+        y: Handle<Expression>,
+    },
 }
 
 /// An expression that can be evaluated to obtain a value.
@@ -649,6 +654,8 @@ pub enum Expression {
         image: Handle<Expression>,
         sampler: Handle<Expression>,
         coordinate: Handle<Expression>,
+        array_index: Option<Handle<Expression>>,
+        offset: Option<Handle<Constant>>,
         level: SampleLevel,
         depth_ref: Option<Handle<Expression>>,
     },
@@ -656,6 +663,7 @@ pub enum Expression {
     ImageLoad {
         image: Handle<Expression>,
         coordinate: Handle<Expression>,
+        array_index: Option<Handle<Expression>>,
         /// For storage images, this is None.
         /// For sampled images, this is the Some(Level).
         /// For multisampled images, this is Some(Sample).
@@ -697,8 +705,6 @@ pub enum Expression {
         arg1: Option<Handle<Expression>>,
         arg2: Option<Handle<Expression>>,
     },
-    /// Transpose of a matrix.
-    Transpose(Handle<Expression>),
     /// Cast a simply type to another kind.
     As {
         /// Source expression, which can only be a scalar or a vector.
