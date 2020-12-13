@@ -1311,9 +1311,17 @@ impl Writer {
                 accept,
                 reject,
             } => {
-                let expression = &ir_function.expressions[condition];
-                let (cond_id, cond_type) =
-                    self.write_expression(ir_module, ir_function, expression, block, function)?;
+                let cond_expression = &ir_function.expressions[condition];
+                let accept_expression = &ir_function.expressions[accept];
+                let reject_expression = &ir_function.expressions[reject];
+
+                let (cond_id, cond_type) = self.write_expression(
+                    ir_module,
+                    ir_function,
+                    cond_expression,
+                    block,
+                    function,
+                )?;
 
                 let cond_type_inner = self.get_type_inner(&ir_module.types, cond_type);
 
